@@ -1,0 +1,54 @@
+# 로컬 개발 환경 설정
+spring:
+  # 개발 편의를 위한 보안 비활성화 (로컬만)
+  security:
+    user:
+      name: admin
+      password: admin123
+      roles: ADMIN
+  # 데이터베이스 설정
+  datasource:
+    url: jdbc:mysql://localhost:3306/fintech_platform?useSSL=false&allowPublicKeyRetrieval=true&serverTimezone=Asia/Seoul&characterEncoding=UTF-8
+    username: admin
+    password: fintech123
+    driver-class-name: com.mysql.cj.jdbc.Driver
+    hikari:
+      maximum-pool-size: 10
+      minimum-idle: 5
+      idle-timeout: 300000
+      max-lifetime: 1200000
+      connection-timeout: 20000
+      validation-timeout: 3000
+      leak-detection-threshold: 60000
+  # JPA 설정
+  jpa:
+    hibernate:
+      ddl-auto: create-drop  # 로컬에서는 테이블 자동 생성/삭제
+    show-sql: true
+    properties:
+      hibernate:
+        dialect: org.hibernate.dialect.MySQLDialect
+  # Redis 설정
+  data:
+    redis:
+      host: localhost
+      port: 6379
+  # 개발 편의 설정
+  devtools:
+    restart:
+      enabled: true
+    livereload:
+      enabled: true
+
+# 로깅 설정
+logging:
+  level:
+    com.fintech.platform: DEBUG
+    org.springframework.data.redis: DEBUG
+    org.redisson: WARN  # DNS 모니터링 로그 억제
+    org.redisson.connection.DNSMonitor: ERROR  # DNS 해결 로그 제외
+    org.hibernate.SQL: DEBUG
+    org.hibernate.type.descriptor.sql.BasicBinder: TRACE
+    org.springframework.web: DEBUG
+  file:
+    name: logs/fintech-platform-local.log

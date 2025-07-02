@@ -1,0 +1,75 @@
+# 운영 환경 설정
+spring:
+  # 데이터베이스 설정
+  datasource:
+    url: jdbc:mysql://${DB_HOST}:${DB_PORT:3306}/${DB_NAME}?useSSL=true&requireSSL=true&serverTimezone=Asia/Seoul&characterEncoding=UTF-8
+    username: ${DB_USERNAME}
+    password: ${DB_PASSWORD}
+    driver-class-name: com.mysql.cj.jdbc.Driver
+    hikari:
+      maximum-pool-size: 50
+      minimum-idle: 15
+      idle-timeout: 300000
+      max-lifetime: 1200000
+      connection-timeout: 20000
+      validation-timeout: 3000
+      leak-detection-threshold: 60000
+      connection-test-query: SELECT 1
+  # JPA 설정
+  jpa:
+    hibernate:
+      ddl-auto: validate  # 운영에서는 스키마 검증만
+    show-sql: false
+    properties:
+      hibernate:
+        dialect: org.hibernate.dialect.MySQLDialect
+        generate_statistics: false
+  # Redis 설정
+  data:
+    redis:
+      host: ${REDIS_HOST}
+      port: ${REDIS_PORT:6379}
+      password: ${REDIS_PASSWORD}
+      ssl: true
+  # 보안 헤더
+  security:
+    headers:
+      frame-options: DENY
+      content-type-options: nosniff
+      xss-protection: 1; mode=block
+
+# 서버 최적화 설정
+server:
+  tomcat:
+    max-threads: 200
+    accept-count: 100
+    max-connections: 8192
+  compression:
+    enabled: true
+    mime-types: application/json,application/xml,text/html,text/xml,text/plain,application/javascript,text/css
+
+# 로깅 설정
+logging:
+  level:
+    com.fintech.platform: WARN
+    org.springframework.data.redis: WARN
+    org.redisson: WARN
+    org.hibernate.SQL: WARN
+    root: WARN
+  file:
+    name: logs/fintech-platform-prod.log
+    max-size: 500MB
+    max-history: 90
+
+# 보안 설정
+management:
+  endpoints:
+    web:
+      base-path: /management
+      exposure:
+        include: health,info
+  endpoint:
+    health:
+      show-details: never
+  security:
+    enabled: true

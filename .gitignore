@@ -1,0 +1,78 @@
+.gradle
+build/
+!gradle/wrapper/gradle-wrapper.jar
+!**/src/main/**/build/
+!**/src/test/**/build/
+
+### IntelliJ IDEA ###
+.idea/modules.xml
+.idea/jarRepositories.xml
+.idea/compiler.xml
+.idea/libraries/
+*.iws
+*.iml
+*.ipr
+out/
+!**/src/main/**/out/
+!**/src/test/**/out/
+
+### Eclipse ###
+.apt_generated
+.classpath
+.factorypath
+.project
+.settings
+.springBeans
+.sts4-cache
+bin/
+!**/src/main/**/bin/
+!**/src/test/**/bin/
+
+### NetBeans ###
+/nbproject/private/
+/nbbuild/
+/dist/
+/nbdist/
+/.nb-gradle/
+
+### VS Code ###
+.vscode/
+
+### Mac OS ###
+.DS_Store
+
+### 보안 설정 - 환경변수 파일 제외 ###
+.env
+.env.local
+.env.dev
+.env.prod
+.env.*.local
+**/application-*-secret.yml
+**/application-*-local.yml
+application-local-secret.yml
+
+### 기타
+ENV_SETUP.md
+
+### 로그 파일 제외 ###
+logs/
+*.log
+log/
+
+### 임시 파일 ###
+temp/
+tmp/
+*.tmp
+*.swp
+*.bak
+
+### 개발 도구 ###
+.vscode/
+.fleet/
+
+### etc
+.env.example
+.idea/
+gradle/
+gradlew
+gradlew.bat

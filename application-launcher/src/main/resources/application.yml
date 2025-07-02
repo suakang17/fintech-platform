@@ -1,0 +1,59 @@
+# FinTech Platform 공통 설정
+spring:
+  application:
+    name: fintech-platform
+  profiles:
+    active: local
+  # JPA 공통 설정
+  jpa:
+    open-in-view: false  # OSIV 비활성화 (성능 최적화)
+    properties:
+      hibernate:
+        format_sql: true
+        default_batch_fetch_size: 100  # N+1 문제 해결
+        jdbc:
+          batch_size: 50  # 배치 처리 최적화
+          batch_versioned_data: true
+  # Redis 공통 설정
+  data:
+    redis:
+      database: 0
+      timeout: 3000ms
+      lettuce:
+        pool:
+          max-wait: 3000ms
+
+# 서버 설정
+server:
+  port: 8080
+  servlet:
+    context-path: /api
+  shutdown: graceful
+
+# 로깅 설정
+logging:
+  pattern:
+    console: "%d{yyyy-MM-dd HH:mm:ss.SSS} [%thread] %-5level [%logger{36}] - %msg%n"
+    file: "%d{yyyy-MM-dd HH:mm:ss.SSS} [%thread] %-5level [%logger{36}] - %msg%n"
+
+# Actuator 설정
+management:
+  endpoints:
+    web:
+      exposure:
+        include: health,info,metrics,redis
+  endpoint:
+    health:
+      show-details: always
+    metrics:
+      enabled: true
+  health:
+    redis:
+      enabled: true
+
+# 애플리케이션 정보
+info:
+  app:
+    name: FinTech Platform
+    description: 플랫폼 서비스
+    version: 1.0.0
