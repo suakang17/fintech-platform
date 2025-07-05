@@ -35,3 +35,67 @@ subprojects {
         useJUnitPlatform()
     }
 }
+
+tasks.register("dockerUp") {
+    group = "docker"
+    description = "Start development environment (Redis, Kafka, etc.)"
+    
+    doLast {
+        println("🚀 Starting Docker Development Environment...")
+        
+        exec {
+            workingDir = file("docker")
+            commandLine("docker-compose", "up", "-d")
+        }
+        
+        println("⏳ Waiting for services to be ready...")
+        Thread.sleep(5000)
+        
+        println("🌐 Access URLs:")
+        println("  - Kafka UI: http://localhost:8080")
+        println("  - Redis: localhost:6379")
+        println("  - Kafka: localhost:9092")
+    }
+}
+
+tasks.register("dockerDown") {
+    group = "docker"
+    description = "Stop development environment"
+    
+    doLast {
+        println("🛑 Stopping Fintech Platform Development Environment...")
+        
+        exec {
+            workingDir = file("docker")
+            commandLine("docker-compose", "down")
+        }
+        
+        println("✅ All services stopped")
+    }
+}
+
+tasks.register("dockerStatus") {
+    group = "docker" 
+    description = "Show status of development environment"
+    
+    doLast {
+        println("📊 Development Environment Status:")
+        
+        exec {
+            workingDir = file("docker")
+            commandLine("docker-compose", "ps")
+        }
+    }
+}
+
+tasks.register("dockerLogs") {
+    group = "docker"
+    description = "Show logs from development environment"
+    
+    doLast {
+        exec {
+            workingDir = file("docker")
+            commandLine("docker-compose", "logs", "-f")
+        }
+    }
+}

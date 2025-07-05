@@ -70,6 +70,10 @@ tmp/
 .vscode/
 .fleet/
 
+### Docker 관련 ###
+docker/data/
+docker/logs/
+
 ### etc
 .env.example
 .idea/
