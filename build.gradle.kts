@@ -38,7 +38,7 @@ subprojects {
 
 tasks.register("dockerUp") {
     group = "docker"
-    description = "Start development environment (Redis, Kafka, etc.)"
+    description = "Start development environment (MySQL, Redis, Kafka, etc.)"
     
     doLast {
         println("🚀 Starting Docker Development Environment...")
@@ -49,12 +49,18 @@ tasks.register("dockerUp") {
         }
         
         println("⏳ Waiting for services to be ready...")
-        Thread.sleep(5000)
+        Thread.sleep(10000)  // MySQL 초기화 시간 고려
         
         println("🌐 Access URLs:")
-        println("  - Kafka UI: http://localhost:8080")
+        println("  - MySQL: localhost:3306 (database: fintech_platform)")
         println("  - Redis: localhost:6379")
+        println("  - Kafka UI: http://localhost:8080")
         println("  - Kafka: localhost:9092")
+        println("")
+        println("🔧 Next steps:")
+        println("  - Check status: ./gradlew dockerStatus")
+        println("  - View logs: ./gradlew dockerLogs")
+        println("  - Connect to MySQL: mysql -h 127.0.0.1 -P 3306 -u fintech_user -p fintech_platform")
     }
 }
 

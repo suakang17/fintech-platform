@@ -4,13 +4,14 @@ spring:
   security:
     user:
       name: admin
-      password: admin123
+      password: ${SPRING_SECURITY_PASSWORD:admin123}
       roles: ADMIN
-  # 데이터베이스 설정
+      
+  # 데이터베이스 설정 (루트 .env 환경변수 사용)
   datasource:
-    url: jdbc:mysql://localhost:3306/fintech_platform?useSSL=false&allowPublicKeyRetrieval=true&serverTimezone=Asia/Seoul&characterEncoding=UTF-8
-    username: admin
-    password: fintech123
+    url: jdbc:mysql://localhost:3306/${DB_NAME:fintech_platform}?useSSL=false&allowPublicKeyRetrieval=true&serverTimezone=Asia/Seoul&characterEncoding=UTF-8
+    username: ${DB_USERNAME}
+    password: ${DB_PASSWORD}
     driver-class-name: com.mysql.cj.jdbc.Driver
     hikari:
       maximum-pool-size: 10
@@ -20,19 +21,30 @@ spring:
       connection-timeout: 20000
       validation-timeout: 3000
       leak-detection-threshold: 60000
+      
   # JPA 설정
   jpa:
     hibernate:
-      ddl-auto: create-drop  # 로컬에서는 테이블 자동 생성/삭제
-    show-sql: true
+      ddl-auto: validate  # 환경변수로 제어 가능하도록 변경
+    show-sql: ${SPRING_JPA_SHOW_SQL:true}
     properties:
       hibernate:
         dialect: org.hibernate.dialect.MySQLDialect
-  # Redis 설정
+        format_sql: true
+        
+  # Redis 설정 (루트 .env 환경변수 사용)
   data:
     redis:
-      host: localhost
-      port: 6379
+      host: ${REDIS_HOST}
+      port: ${REDIS_PORT}
+      password: ${REDIS_PASSWORD}
+      timeout: 3000ms
+      lettuce:
+        pool:
+          max-active: 8
+          max-idle: 8
+          min-idle: 0
+          
   # 개발 편의 설정
   devtools:
     restart:
@@ -40,15 +52,19 @@ spring:
     livereload:
       enabled: true
 
-# 로깅 설정
+# 로깅 설정 (환경변수 사용)
 logging:
   level:
-    com.fintech.platform: DEBUG
+    root: ${LOGGING_LEVEL_ROOT:INFO}
+    com.fintech.platform: ${LOGGING_LEVEL_FINTECH:DEBUG}
     org.springframework.data.redis: DEBUG
     org.redisson: WARN  # DNS 모니터링 로그 억제
-    org.redisson.connection.DNSMonitor: ERROR  # DNS 해결 로그 제외
-    org.hibernate.SQL: DEBUG
+    org.redisson.connection.DNSMonitor: ERROR # DNS 해결 로그 제외
+    org.hibernate.SQL: ${SPRING_JPA_SHOW_SQL:true}
     org.hibernate.type.descriptor.sql.BasicBinder: TRACE
     org.springframework.web: DEBUG
   file:
     name: logs/fintech-platform-local.log
+  pattern:
+    file: "%d{yyyy-MM-dd HH:mm:ss.SSS} [%thread] %-5level %logger{36} - %msg%n"
+    console: "%d{HH:mm:ss.SSS} [%thread] %-5level %logger{36} - %msg%n"
