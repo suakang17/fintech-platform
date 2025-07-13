@@ -25,7 +25,14 @@ subprojects {
     dependencies {
         // Spring Boot BOM 적용
         add("implementation", platform("org.springframework.boot:spring-boot-dependencies:3.2.5"))
-        
+
+        // BOM에서 버전 관리 (이게 더 깔끔)
+        add("compileOnly", "org.projectlombok:lombok")
+        add("annotationProcessor", "org.projectlombok:lombok")
+
+        add("testCompileOnly", "org.projectlombok:lombok")
+        add("testAnnotationProcessor", "org.projectlombok:lombok")
+
         // 공통 의존성
         add("testImplementation", "org.springframework.boot:spring-boot-starter-test")
         add("testRuntimeOnly", "org.junit.platform:junit-platform-launcher")
@@ -54,6 +61,7 @@ tasks.register("dockerUp") {
         println("🌐 Access URLs:")
         println("  - MySQL: localhost:3306 (database: fintech_platform)")
         println("  - Redis: localhost:6379")
+        println("  - Redis Insight: http://localhost:8002")
         println("  - Kafka UI: http://localhost:8080")
         println("  - Kafka: localhost:9092")
         println("")
